@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fastrr for So Sorry Sugar — Checkout Experience Proposal</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Instrument Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          },
+          colors: {
+            brand: {
+              indigo: '#5B46F6',
+              indigoDark: '#4834D4',
+              indigoLight: '#EEF2FF',
+              slate: '#0F172A',
+              muted: '#475569',
+              bg: '#FAFAFA',
+              cocoa: '#3E2723',
+              berry: '#9D174D',
+              emerald: '#059669',
+            }
+          },
+          boxShadow: {
+            'soft': '0 10px 35px -10px rgba(15, 23, 42, 0.06)',
+            'card': '0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 24px -6px rgba(15, 23, 42, 0.06)',
+            'widget': '0 20px 50px -12px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #FAFAFA;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .editorial-serif {
+      font-family: 'Instrument Serif', serif;
+      letter-spacing: -0.01em;
+    }
+
+    /* Custom subtle grid backdrop for interactive mockups */
+    .mockup-stage {
+      background-color: #F4F5F8;
+      background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* Smooth transitions for interactive UI elements */
+    .transition-smooth {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Hide scrollbar for clean pill strips */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Active nav link indicator */
+    .nav-link.active {
+      color: #5B46F6;
+      background-color: #EEF2FF;
+    }
+
+    @keyframes pulseSubtle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .pulse-subtle {
+      animation: pulseSubtle 2.4s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- =========================================================
+       STICKY TOP NAVIGATION BAR (No Commercials link)
+  ========================================================== -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <!-- Left: fastrr Logo Mark + Wordmark -->
+      <a href="#top" class="flex items-center gap-2.5 group shrink-0">
+        <div class="w-8 h-8 rounded-xl bg-brand-indigo flex items-center justify-center text-white shadow-sm group-hover:bg-brand-indigoDark transition-smooth">
+          <!-- Lightning bolt icon -->
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M13 2L4.5 13.5H11.5L10.5 22L19.5 10.5H12.5L13 2Z" />
+          </svg>
+        </div>
+        <div class="flex items-baseline gap-1.5">
+          <span class="font-extrabold text-xl tracking-tight text-slate-900">fastrr</span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 hidden sm:inline">by Shiprocket</span>
+        </div>
+      </a>
+
+      <!-- Center: Section Anchor Links -->
+      <nav aria-label="Proposal Sections" class="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200/60">
+        <a href="#today" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Today</a>
+        <a href="#s1" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Product page</a>
+        <a href="#s2" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Cart</a>
+        <a href="#s3" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Checkout</a>
+        <a href="#s4" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Payments</a>
+        <a href="#s5" class="nav-link px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition-smooth">Repeat</a>
+      </nav>
+
+      <!-- Right: Brand Pill Badge -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-900 border border-rose-200/80 shadow-2xs">
+          <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+          For So Sorry Sugar
+        </span>
+      </div>
+    </div>
+
+    <!-- Mobile Horizontal Scroll Nav -->
+    <div class="md:hidden border-t border-slate-100 bg-white px-4 py-2 overflow-x-auto no-scrollbar flex items-center gap-1.5">
+      <a href="#today" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Today</a>
+      <a href="#s1" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Product page</a>
+      <a href="#s2" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Cart</a>
+      <a href="#s3" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Checkout</a>
+      <a href="#s4" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Payments</a>
+      <a href="#s5" class="nav-link shrink-0 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 bg-slate-100">Repeat</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- =========================================================
+         1. HERO HEADER
+    ========================================================== -->
+    <section class="pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 sm:px-6 border-b border-slate-200/80 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <!-- Eyebrow Pill -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-brand-indigo text-xs font-bold tracking-wide mb-6">
+          <span>Checkout Proposal — fastrr for So Sorry Sugar</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-3xl sm:text-5xl lg:text-[54px] font-extrabold text-slate-900 tracking-tight leading-[1.12] max-w-4xl">
+          So Sorry Sugar made indulgence guilt-free. <span class="editorial-serif font-normal italic text-brand-indigo text-4xl sm:text-6xl lg:text-[62px]">Let’s make buying it just as effortless.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl">
+          Guilt-free cravings don’t wait for a five-step form. This proposal follows a shopper from discovering a zero-sugar treat to their next celebratory reorder, showing what fastrr Checkout adds at every step—with interactive UI previews tailored for So Sorry Sugar.
+        </p>
+
+        <!-- 3-Column Metadata Strip -->
+        <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <div class="sm:border-r sm:border-slate-200/80 sm:pr-4">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Prepared For</div>
+            <div class="mt-1 text-sm font-bold text-slate-900">So Sorry Sugar — D2C &amp; Growth Team</div>
+          </div>
+          <div class="sm:border-r sm:border-slate-200/80 sm:px-4">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Today</div>
+            <div class="mt-1 text-sm font-bold text-slate-900">Shopify storefront, standard multi-step checkout</div>
+          </div>
+          <div class="sm:pl-4">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Scope</div>
+            <div class="mt-1 text-sm font-bold text-brand-indigo">Full fastrr Checkout suite (PDP to Repeat)</div>
+          </div>
+        </div>
+
+        <!-- 4-Column KPI Stat Cards -->
+        <div class="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">42M+</div>
+            <p class="mt-1.5 text-xs sm:text-sm text-slate-600 leading-snug">Pre-verified Indian shoppers on fastrr network</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-brand-indigo tracking-tight">95%+</div>
+            <p class="mt-1.5 text-xs sm:text-sm text-slate-600 leading-snug">One-tap address pre-fill at checkout</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">96%+</div>
+            <p class="mt-1.5 text-xs sm:text-sm text-slate-600 leading-snug">Live EDD prediction accuracy via Shiprocket</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">620M+</div>
+            <p class="mt-1.5 text-xs sm:text-sm text-slate-600 leading-snug">Order outcomes powering real-time COD risk scoring</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         2. SECTION: WHERE SO SORRY SUGAR STANDS TODAY (#today)
+    ========================================================== -->
+    <section id="today" class="py-16 sm:py-24 px-4 sm:px-6 border-b border-slate-200/80 scroll-mt-16">
+      <div class="max-w-5xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="text-xs font-bold uppercase tracking-widest text-brand-indigo">Where So Sorry Sugar Stands Today</div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            A great D2C storefront wins the craving. The network wins the conversion.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Standard Shopify checkouts treat every sweet-toothed shopper like a complete stranger—requiring manual address typing, static shipping estimates, and blunt COD rules. fastrr plugs network-wide shopper intelligence directly into So Sorry Sugar out of the box.
+          </p>
+        </div>
+
+        <!-- 2-Column Comparison Grid -->
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left Card: Standard Checkout -->
+          <div class="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-card">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold mb-6">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              What a standard checkout leaves on the table
+            </div>
+
+            <ul class="space-y-5">
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 text-xs font-bold">✕</span>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Address friction</div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Every new visitor manually types street, landmark, and pincode—causing drop-offs on mobile impulse orders.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 text-xs font-bold">✕</span>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Static delivery promises</div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Generic “3–5 business days” text doesn't reassure shoppers ordering chocolates or mithai for a birthday or occasion.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 text-xs font-bold">✕</span>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Blunt COD rules</div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Either offering blanket COD (risking RTO on perishable/artisan treats) or blocking COD and losing first-time buyers.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 text-xs font-bold">✕</span>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Manual cart &amp; offer setups</div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Coupon codes and prepaid nudges require custom theme edits or multiple disjointed apps.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 text-xs font-bold">✕</span>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Basic payment handoffs</div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Redirect-heavy payment flows that stall mobile impulse buyers before UPI confirmation.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right Card: fastrr Network Advantage -->
+          <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-widget relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-brand-indigo/25 blur-2xl pointer-events-none"></div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-bold mb-6">
+              <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+              What fastrr brings from the network
+            </div>
+
+            <ul class="space-y-5 relative">
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</span>
+                <div>
+                  <div class="text-sm font-bold text-white">Instant address data from 42M+ consumers</div>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Pre-filled for 95%+ of shoppers via single OTP or zero-OTP network recognition.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</span>
+                <div>
+                  <div class="text-sm font-bold text-white">Live delivery dates predicted from real courier performance</div>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Powered by the Shiprocket network across pincodes—96%+ accurate down to the exact date.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</span>
+                <div>
+                  <div class="text-sm font-bold text-white">Smart COD risk scoring from 620M+ real order outcomes</div>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Blocks high-RTO profiles while allowing trusted COD or Partial COD to convert new tasters safely.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</span>
+                <div>
+                  <div class="text-sm font-bold text-white">No-code offers &amp; cart widgets</div>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Configured directly by your growth team in minutes—no developer tickets required.</p>
+                </div>
+              </li>
+              <li class="flex items-start gap-3.5">
+                <span class="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</span>
+                <div>
+                  <div class="text-sm font-bold text-white">High-converting payment stack</div>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Seamless PayU, Easebuzz, BillDesk, and PhonePe routing with instant 1-tap UPI intent.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         3. STEP 1 · THE PRODUCT PAGE (#s1)
+    ========================================================== -->
+    <section id="s1" class="py-16 sm:py-24 px-4 sm:px-6 border-b border-slate-200/80 bg-white scroll-mt-16">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-indigo">
+            <span>Step 1 · The product page</span>
+          </div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            They land on a zero-sugar chocolate box. Three questions decide if they add it.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Whether it’s a mid-day sweet craving or last-minute gifting, shoppers check when it arrives, whether there’s an instant deal, and if a new dessert brand can be trusted—before hitting Add to Cart.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Side: Feature Cards + Impact Box (6 cols) -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">01</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Dynamic EDD: A live delivery date, with pincode already filled in</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Pre-filled automatically from the fastrr network with 1-tap pincode edit, replacing vague shipping tables with an exact delivery promise.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">02</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">SDD / NDD: Same-day and next-day badges where serviceable</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Crucial for last-minute sweet gifting, festive hampers, and immediate dessert cravings in metro cities.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">03</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Offers widget: Best price &amp; prepaid savings shown upfront</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Auto-surfaced right beside Add to Cart alongside a 1-tap Express Buy Now button for high-intent buyers.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">04</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Pay After Delivery / Trust widget: First-time buyer reassurance</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Builds instant confidence on the PDP so skeptical first-time tasters feel safe trying a zero-sugar dessert brand.
+              </p>
+            </div>
+
+            <!-- Impact Box -->
+            <div class="p-5 rounded-2xl bg-indigo-50/90 border border-indigo-200/80">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-brand-indigo">What it brings So Sorry Sugar</div>
+              <div class="mt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-semibold text-slate-800">
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-brand-indigo">12–22%</span>
+                  PDP-to-cart lift
+                </div>
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-slate-900">Lower bounce</span>
+                  Delivery clarity upfront
+                </div>
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-emerald-600">Prepaid first</span>
+                  Savings nudged early
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Interactive So Sorry Sugar PDP Widget Stack (6 cols) -->
+          <div class="lg:col-span-6 mockup-stage rounded-3xl p-5 sm:p-7 border border-slate-200/90">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Interactive PDP Preview · Try Pincodes</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-white text-[11px] font-semibold text-slate-700 border border-slate-200">sosorrysugar.in</span>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-widget p-5 space-y-4">
+              <!-- Product Mini Header -->
+              <div class="flex gap-4 items-center pb-4 border-b border-slate-100">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-900 via-rose-950 to-stone-900 flex flex-col items-center justify-center text-amber-100 shrink-0 shadow-inner">
+                  <span class="text-[9px] uppercase tracking-widest opacity-80">0% Sugar</span>
+                  <span class="font-serif italic text-lg leading-none mt-0.5">Truffle</span>
+                  <span class="text-[8px] uppercase tracking-wider mt-0.5 text-amber-300">Box of 12</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">Zero Added Sugar</span>
+                    <span class="text-[11px] text-amber-600 font-bold">★ 4.9 (418)</span>
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-sm sm:text-base mt-1 truncate">Belgian Dark Chocolate Truffle Box</h4>
+                  <div class="flex items-baseline gap-2 mt-0.5">
+                    <span class="font-extrabold text-slate-900 text-base">₹699</span>
+                    <span class="text-xs text-slate-400 line-through">₹849</span>
+                    <span class="text-[11px] font-bold text-emerald-600">18% OFF</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Pincode Switcher + Live EDD Widget -->
+              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                  <span class="text-[11px] font-semibold text-slate-500">Delivering to (auto-detected):</span>
+                  <div class="flex items-center gap-1.5" role="group" aria-label="Select sample pincode">
+                    <button type="button" onclick="updatePincode('122002')" id="pin-122002" class="pin-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-indigo text-white transition-smooth">122002 GGN</button>
+                    <button type="button" onclick="updatePincode('400050')" id="pin-400050" class="pin-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-700 border border-slate-200 hover:border-slate-300 transition-smooth">400050 BOM</button>
+                    <button type="button" onclick="updatePincode('560038')" id="pin-560038" class="pin-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-700 border border-slate-200 hover:border-slate-300 transition-smooth">560038 BLR</button>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/60">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-xs font-bold text-slate-900" id="edd-headline">Get it tomorrow, Tue 24 Nov</div>
+                      <div class="text-[11px] text-slate-500" id="edd-sub">Order within 3h 14m · Insulated cold-pack transit</div>
+                    </div>
+                  </div>
+                  <span id="edd-badge" class="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wide shrink-0">Next-Day</span>
+                </div>
+              </div>
+
+              <!-- Best Price & Prepaid Offer Bar -->
+              <div class="p-3 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200/80 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2 py-1 rounded-lg bg-brand-indigo text-white text-[10px] font-extrabold">BEST PRICE</span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-900">Get it for <span class="text-brand-indigo font-extrabold">₹649</span> with UPI / Prepaid</div>
+                    <div class="text-[11px] text-slate-600">Extra ₹50 instant off auto-applied at checkout</div>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-brand-indigo shrink-0">Auto-applied</span>
+              </div>
+
+              <!-- Express Buy Now CTA -->
+              <div class="space-y-2 pt-1">
+                <button type="button" onclick="scrollToSection('s3')" class="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2.5 shadow-md transition-smooth cursor-pointer">
+                  <span>Express Buy Now · ₹649</span>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/15 text-[10px] font-semibold">
+                    UPI · GPay · PhonePe
+                  </span>
+                </button>
+                <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500 pt-1">
+                  <span class="flex items-center gap-1"><span class="text-emerald-600 font-bold">✓</span> Pay After Delivery eligible</span>
+                  <span class="flex items-center gap-1"><span class="text-emerald-600 font-bold">✓</span> 100% Diabetic-Friendly</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         4. STEP 2 · THE CART (#s2)
+    ========================================================== -->
+    <section id="s2" class="py-16 sm:py-24 px-4 sm:px-6 border-b border-slate-200/80 scroll-mt-16">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="text-xs font-bold uppercase tracking-widest text-brand-indigo">Step 2 · The cart</div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Turn a single box impulse into a higher-AOV bundle.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Once a shopper adds their favourite guilt-free treat, the cart is the highest-intent moment to unlock free shipping, suggest a complementary flavour, and lock in prepaid savings.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Side: Interactive Smart Cart Drawer Mockup (6 cols) -->
+          <div class="lg:col-span-6 mockup-stage rounded-3xl p-5 sm:p-7 border border-slate-200/90 order-2 lg:order-1">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Interactive Smart Cart · Toggle Add-On</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-[11px] font-bold text-brand-indigo">fastrr Cart</span>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-widget overflow-hidden">
+              <!-- Dynamic Tiered Progress Bar -->
+              <div class="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
+                <div class="flex items-center justify-between text-xs font-bold mb-2">
+                  <span id="cart-progress-text" class="text-emerald-900">Add ₹100 more to unlock FREE Express Shipping + Mini Almond Bark!</span>
+                  <span id="cart-progress-pct" class="text-emerald-700">87%</span>
+                </div>
+                <div class="w-full h-2.5 rounded-full bg-emerald-200/70 overflow-hidden">
+                  <div id="cart-progress-bar" class="h-full rounded-full bg-emerald-600 transition-smooth" style="width: 87%;"></div>
+                </div>
+              </div>
+
+              <!-- Cart Line Items -->
+              <div class="p-4 space-y-3 divide-y divide-slate-100">
+                <!-- Base Item -->
+                <div class="flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-amber-950 text-amber-100 flex items-center justify-center font-serif italic text-sm shrink-0">
+                      Truffle
+                    </div>
+                    <div>
+                      <div class="text-xs sm:text-sm font-bold text-slate-900">Belgian Dark Chocolate Truffle Box</div>
+                      <div class="text-[11px] text-slate-500">Box of 12 · Zero Sugar · Qty 1</div>
+                    </div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="text-sm font-extrabold text-slate-900">₹699</div>
+                    <div class="text-[10px] text-slate-400 line-through">₹849</div>
+                  </div>
+                </div>
+
+                <!-- Dynamic Upsell Item (Hidden until toggled) -->
+                <div id="cart-upsell-line" class="hidden pt-3 flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-rose-900 text-rose-100 flex items-center justify-center font-serif italic text-sm shrink-0">
+                      Hazelnut
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-xs sm:text-sm font-bold text-slate-900">Hazelnut Dark Chocolate Bar</span>
+                        <span class="px-1.5 py-0.5 rounded bg-indigo-50 text-brand-indigo text-[9px] font-bold">BUNDLE</span>
+                      </div>
+                      <div class="text-[11px] text-slate-500">85g · Stevia Sweetened · Qty 1</div>
+                    </div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="text-sm font-extrabold text-slate-900">₹249</div>
+                    <div class="text-[10px] text-emerald-600 font-bold">Unlocked Free Gift!</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 1-Click In-Cart Upsell Card -->
+              <div class="mx-4 mb-4 p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">Frequently Paired Craving</div>
+                  <div class="text-xs font-bold text-slate-900 mt-0.5">Hazelnut Dark Chocolate Bar · ₹249</div>
+                  <div class="text-[11px] text-slate-600">Unlocks Free Shipping + Complimentary Mini Bark</div>
+                </div>
+                <button type="button" id="toggle-upsell-btn" onclick="toggleCartUpsell()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shrink-0 transition-smooth cursor-pointer">
+                  + Add ₹249
+                </button>
+              </div>
+
+              <!-- Auto-Applied Coupon & Prepaid Incentive Callout -->
+              <div class="mx-4 mb-4 p-3 rounded-xl bg-indigo-50/80 border border-indigo-200/70 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-brand-indigo flex items-center gap-1.5">
+                    <span>🏷️</span> Coupon <code class="px-1.5 py-0.5 rounded bg-white border border-indigo-200 font-mono text-[11px]">GUILTFREE5</code> auto-applied
+                  </span>
+                  <span id="cart-discount-val" class="font-extrabold text-emerald-600">-₹35</span>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-600 pt-1.5 border-t border-indigo-200/50">
+                  <span>Pay via UPI / Card to lock extra 5% prepaid discount</span>
+                  <span class="font-bold text-slate-900">Prepaid Preferred</span>
+                </div>
+              </div>
+
+              <!-- Cart Footer CTA -->
+              <div class="p-4 bg-slate-50 border-t border-slate-200/80 flex items-center justify-between gap-4">
+                <div>
+                  <div class="text-[11px] text-slate-500">Estimated Prepaid Total</div>
+                  <div class="flex items-baseline gap-2">
+                    <span id="cart-total-val" class="text-lg font-extrabold text-slate-900">₹664</span>
+                    <span id="cart-shipping-tag" class="text-[11px] font-semibold text-slate-500">+ ₹49 shipping</span>
+                  </div>
+                </div>
+                <button type="button" onclick="scrollToSection('s3')" class="px-5 py-3 rounded-xl bg-brand-indigo hover:bg-brand-indigoDark text-white font-bold text-xs sm:text-sm shadow-sm transition-smooth cursor-pointer">
+                  Proceed to 1-Tap Checkout →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Feature Breakdown + Impact Box (6 cols) -->
+          <div class="lg:col-span-6 space-y-4 order-1 lg:order-2">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">01</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Smart Tiered Progress Bar</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Visual nudges toward free shipping or a complimentary mini treat—encouraging shoppers to add a second chocolate bar or mithai box to lift AOV.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">02</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">1-Click In-Cart Upsells</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Contextual pairings—like adding sugar-free laddoos, roasted almond barks, or dark chocolate bars—with a single tap without leaving the cart.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">03</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Auto-Applied Best Coupon</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Zero coupon-hunting drop-offs on third-party deal tabs; the highest eligible discount applies automatically inside the drawer.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">04</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Prepaid Incentive Callout</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Clear side-by-side savings showing why UPI/Card beats COD before the shopper even reaches the payment step.
+              </p>
+            </div>
+
+            <!-- Impact Box -->
+            <div class="p-5 rounded-2xl bg-emerald-50/90 border border-emerald-200/80">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">What it brings So Sorry Sugar</div>
+              <p class="mt-1.5 text-xs sm:text-sm font-semibold text-slate-800">
+                15–25% higher Average Order Value through effortless bundle pairing, paired with higher prepaid share from upfront UPI savings visibility.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         5. STEP 3 · CHECKOUT (#s3)
+    ========================================================== -->
+    <section id="s3" class="py-16 sm:py-24 px-4 sm:px-6 border-b border-slate-200/80 bg-white scroll-mt-16">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="text-xs font-bold uppercase tracking-widest text-brand-indigo">Step 3 · Checkout</div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            From intent to confirmed address in under 10 seconds.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Impulse food and dessert purchases die in long address forms. fastrr replaces multi-page forms with a single bottom-sheet drawer where identity, address, and delivery speed are already solved.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Side: Feature Breakdown + Impact Box (6 cols) -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">01</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">1-Tap Login &amp; 95%+ Address Pre-Fill</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Recognises 42M+ network shoppers instantly—surfacing verified home/office addresses with zero typing of flat numbers or landmarks.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">02</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Intelligent COD &amp; Partial COD Engine</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Powered by 620M+ Shiprocket outcomes—offers full COD to reliable buyers, while prompting Partial COD (e.g., ₹99 advance) or prepaid to high-RTO profiles.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">03</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Gifting &amp; Delivery Note Ready</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Seamless alternate address selection and gift message support for sending guilt-free chocolate hampers to friends and family.
+              </p>
+            </div>
+
+            <!-- Impact Box -->
+            <div class="p-5 rounded-2xl bg-indigo-50/90 border border-indigo-200/80">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-brand-indigo">What it brings So Sorry Sugar</div>
+              <div class="mt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-semibold text-slate-800">
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-brand-indigo">25–35%</span>
+                  Checkout conversion lift
+                </div>
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-emerald-600">Lower RTO</span>
+                  Smart risk gating
+                </div>
+                <div class="bg-white/90 p-3 rounded-xl border border-indigo-100">
+                  <span class="block text-base font-extrabold text-slate-900">&lt; 10 sec</span>
+                  Mobile form completion
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Interactive fastrr Checkout Bottom-Sheet Mockup (6 cols) -->
+          <div class="lg:col-span-6 mockup-stage rounded-3xl p-5 sm:p-7 border border-slate-200/90">
+            <!-- Shopper Mode Switcher -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Simulate Shopper Type</span>
+              <div class="inline-flex rounded-xl bg-white p-1 border border-slate-200 shadow-2xs">
+                <button type="button" id="mode-returning" onclick="setShopperMode('returning')" class="px-3 py-1 rounded-lg text-[11px] font-bold bg-brand-indigo text-white transition-smooth cursor-pointer">
+                  Returning Network (95% pre-filled)
+                </button>
+                <button type="button" id="mode-firsttime" onclick="setShopperMode('firsttime')" class="px-3 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition-smooth cursor-pointer">
+                  First-Time / High-RTO Check
+                </button>
+              </div>
+            </div>
+
+            <!-- Checkout Drawer Card -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-widget overflow-hidden">
+              <!-- Drawer Header -->
+              <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="font-serif italic text-lg text-amber-200">So Sorry Sugar</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-white/10 text-slate-300 font-semibold">100% Secure</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px] text-indigo-300 font-bold">
+                  <span>⚡ fastrr</span>
+                </div>
+              </div>
+
+              <div class="p-5 space-y-4">
+                <!-- Identity & Saved Address Card -->
+                <div id="checkout-address-card" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span id="checkout-user-label" class="text-xs font-bold text-slate-900">Ananya Sharma · +91 98114 •••82</span>
+                    </div>
+                    <span id="checkout-network-pill" class="px-2 py-0.5 rounded-md bg-indigo-50 text-brand-indigo text-[10px] font-extrabold">Network Verified</span>
+                  </div>
+
+                  <div id="checkout-address-body" class="text-xs text-slate-600 pl-4 border-l-2 border-brand-indigo">
+                    <div class="font-semibold text-slate-800">B-402, DLF Phase 5, Golf Course Road</div>
+                    <div>Gurugram, Haryana — 122002</div>
+                  </div>
+
+                  <!-- Gifting toggle -->
+                  <label class="flex items-center gap-2 pt-2 border-t border-slate-200/70 text-[11px] font-semibold text-slate-700 cursor-pointer">
+                    <input type="checkbox" id="gift-toggle" onchange="toggleGiftNote()" class="rounded text-brand-indigo focus:ring-brand-indigo" />
+                    <span>🎁 Sending as a guilt-free gift? Add a custom note</span>
+                  </label>
+                  <div id="gift-note-box" class="hidden pt-1">
+                    <input type="text" value="Happy Birthday! Enjoy all the chocolate, zero sugar guilt ✨" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 bg-white text-slate-800" />
+                  </div>
+                </div>
+
+                <!-- Live Shiprocket EDD Courier Badge -->
+                <div class="px-3.5 py-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/80 flex items-center justify-between">
+                  <div class="flex items-center gap-2 text-xs">
+                    <span>🚚</span>
+                    <span class="font-bold text-emerald-950" id="checkout-edd-text">Delivers Tomorrow, Tue 24 Nov</span>
+                  </div>
+                  <span class="text-[10px] font-extrabold text-emerald-700 uppercase">Free Express</span>
+                </div>
+
+                <!-- Smart COD / Partial COD Toggle Section -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Delivery Payment Preference</span>
+                    <span id="cod-risk-badge" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Low RTO Score · Full COD Unlocked</span>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" id="pay-pref-prepaid" onclick="selectCheckoutMethod('prepaid')" class="p-3 rounded-xl border-2 border-brand-indigo bg-indigo-50/50 text-left transition-smooth cursor-pointer">
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-slate-900">UPI / Prepaid</span>
+                        <span class="px-1.5 py-0.5 rounded bg-brand-indigo text-white text-[9px] font-bold">SAVE ₹50</span>
+                      </div>
+                      <div class="text-xs font-bold text-brand-indigo mt-1">Pay ₹649 now</div>
+                    </button>
+
+                    <button type="button" id="pay-pref-cod" onclick="selectCheckoutMethod('cod')" class="p-3 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-smooth cursor-pointer">
+                      <div class="flex items-center justify-between">
+                        <span id="cod-option-title" class="text-xs font-extrabold text-slate-900">Cash on Delivery</span>
+                      </div>
+                      <div id="cod-option-sub" class="text-xs text-slate-500 mt-1">Pay ₹699 on delivery</div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Continue Button -->
+                <button type="button" onclick="scrollToSection('s4')" id="checkout-cta-btn" class="w-full py-3.5 px-4 rounded-xl bg-brand-indigo hover:bg-brand-indigoDark text-white font-bold text-sm shadow-md transition-smooth cursor-pointer">
+                  Continue to 1-Tap UPI (₹649) →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         6. STEP 4 · PAYMENTS (#s4)
+    ========================================================== -->
+    <section id="s4" class="py-16 sm:py-24 px-4 sm:px-6 border-b border-slate-200/80 scroll-mt-16">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="text-xs font-bold uppercase tracking-widest text-brand-indigo">Step 4 · Payments</div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            One-tap UPI intent that captures the craving before it passes.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Over 75% of D2C snack and dessert orders happen on mobile. Every extra OTP or payment redirect gives second thoughts a window.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Side: Interactive Payment Stack UI Preview (6 cols) -->
+          <div class="lg:col-span-6 mockup-stage rounded-3xl p-5 sm:p-7 border border-slate-200/90 order-2 lg:order-1">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Interactive Payment Stack · Tap App</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Smart Gateway Routing Active
+              </span>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-widget p-5 space-y-4">
+              <!-- Instant Prepaid Discount Banner -->
+              <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">🎉</span>
+                  <div>
+                    <div class="text-xs font-extrabold text-emerald-950">₹50 Instant UPI Discount Applied</div>
+                    <div class="text-[11px] text-emerald-700">Zero redirect · Opens your UPI app directly</div>
+                  </div>
+                </div>
+                <span class="text-sm font-extrabold text-emerald-900">₹649</span>
+              </div>
+
+              <!-- 1-Tap UPI Intent Apps -->
+              <div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">Recommended · 1-Tap UPI Intent</div>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <button type="button" onclick="selectUpiApp('PhonePe')" id="upi-PhonePe" class="upi-app-btn p-3 rounded-xl border-2 border-brand-indigo bg-indigo-50/40 flex flex-col items-center gap-1.5 transition-smooth cursor-pointer">
+                    <div class="w-9 h-9 rounded-full bg-purple-700 text-white font-extrabold text-xs flex items-center justify-center">Pe</div>
+                    <span class="text-xs font-bold text-slate-900">PhonePe</span>
+                    <span class="text-[9px] font-bold text-emerald-600">Fastest</span>
+                  </button>
+
+                  <button type="button" onclick="selectUpiApp('GPay')" id="upi-GPay" class="upi-app-btn p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 flex flex-col items-center gap-1.5 transition-smooth cursor-pointer">
+                    <div class="w-9 h-9 rounded-full bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center">G</div>
+                    <span class="text-xs font-bold text-slate-900">Google Pay</span>
+                    <span class="text-[9px] font-semibold text-slate-400">1-Tap</span>
+                  </button>
+
+                  <button type="button" onclick="selectUpiApp('Paytm')" id="upi-Paytm" class="upi-app-btn p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 flex flex-col items-center gap-1.5 transition-smooth cursor-pointer">
+                    <div class="w-9 h-9 rounded-full bg-sky-500 text-white font-extrabold text-xs flex items-center justify-center">Pt</div>
+                    <span class="text-xs font-bold text-slate-900">Paytm</span>
+                    <span class="text-[9px] font-semibold text-slate-400">1-Tap</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Other Payment Modes Accordion-style Rows -->
+              <div class="space-y-2 pt-1">
+                <div class="p-3 rounded-xl border border-slate-200/80 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2.5 font-semibold text-slate-800">
+                    <span>💳</span>
+                    <span>Credit / Debit Cards (Saved &amp; Tokenized)</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-brand-indigo">Save ₹50</span>
+                </div>
+                <div class="p-3 rounded-xl border border-slate-200/80 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2.5 font-semibold text-slate-800">
+                    <span>🏦</span>
+                    <span>Netbanking &amp; Pay Later (Simpl / LazyPay)</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400">Available</span>
+                </div>
+              </div>
+
+              <!-- Gateway Failover Status Strip -->
+              <div class="px-3 py-2 rounded-lg bg-slate-50 border border-slate-200/70 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
+                <span>Routed via <strong>PayU</strong> · Auto-failover ready: Easebuzz, BillDesk, PhonePe PG</span>
+                <span class="font-bold text-emerald-600">99.98% Uptime</span>
+              </div>
+
+              <!-- Pay CTA -->
+              <button type="button" onclick="triggerSimulatedPayment()" id="pay-now-btn" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-smooth cursor-pointer">
+                Pay ₹649 Instantly via PhonePe →
+              </button>
+              <div id="payment-feedback" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900 text-center">
+                ✓ Order #SSS-8492 Confirmed via PhonePe UPI Intent in 4.2 seconds!
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Feature Breakdown + Impact Box (6 cols) -->
+          <div class="lg:col-span-6 space-y-4 order-1 lg:order-2">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">01</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Native UPI Intent Flow</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Opens GPay, PhonePe, or Paytm directly on mobile—eliminating manual VPA/UPI ID typing, QR scanning, or browser redirect drops.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">02</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Prepaid Conversion Nudges</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Dynamic instant discounts on UPI and Cards that shift COD-inclined dessert buyers into confirmed, zero-RTO prepaid revenue.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-card">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-brand-indigo flex items-center justify-center text-xs font-extrabold">03</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Multi-Gateway Smart Routing</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Freedom to connect PayU, Easebuzz, BillDesk, and PhonePe with automatic downtime failover so peak festive traffic never stalls.
+              </p>
+            </div>
+
+            <!-- Impact Box -->
+            <div class="p-5 rounded-2xl bg-indigo-50/90 border border-indigo-200/80">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-brand-indigo">What it brings So Sorry Sugar</div>
+              <p class="mt-1.5 text-xs sm:text-sm font-semibold text-slate-800">
+                12–18% boost in payment success rates and a measurable shift from COD to prepaid orders—protecting working capital and margins.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         7. STEP 5 · REPEAT (#s5)
+    ========================================================== -->
+    <section id="s5" class="py-16 sm:py-24 px-4 sm:px-6 bg-white scroll-mt-16">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <div class="text-xs font-bold uppercase tracking-widest text-brand-indigo">Step 5 · Repeat &amp; Retention</div>
+          <h2 class="mt-2.5 text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            When the box finishes, the next order takes two taps.
+          </h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">
+            Zero-sugar treats become a daily habit. fastrr turns one-time tasters into repeat subscribers and loyalists with post-purchase tracking and instant reorder flows.
+          </p>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Side: Feature Breakdown + Impact Box (6 cols) -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">01</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Branded Live Tracking &amp; Proactive Alerts</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Reduces WISMO (“Where Is My Order?”) support tickets with accurate Shiprocket milestone updates on a So Sorry Sugar branded tracking experience.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">02</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">1-Tap Repeat Checkout</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Returning So Sorry Sugar customers bypass address and login steps completely—reordering their favourite truffle box or mithai pack in two taps.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold">03</span>
+                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Post-Purchase Cross-Sell &amp; WhatsApp Triggers</h3>
+              </div>
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Automated replenishment nudges timed to when their 12-piece box runs low—turning festive or trial buyers into recurring customers.
+              </p>
+            </div>
+
+            <!-- Impact Box -->
+            <div class="p-5 rounded-2xl bg-emerald-50/90 border border-emerald-200/80">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">What it brings So Sorry Sugar</div>
+              <p class="mt-1.5 text-xs sm:text-sm font-semibold text-slate-800">
+                Higher 60-day repeat purchase velocity, lower customer acquisition payback period, and delightful post-purchase brand recall.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Side: Interactive Post-Purchase & 1-Click Reorder UI Preview (6 cols) -->
+          <div class="lg:col-span-6 mockup-stage rounded-3xl p-5 sm:p-7 border border-slate-200/90">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Post-Purchase &amp; Reorder Preview</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-white text-[11px] font-semibold text-slate-700 border border-slate-200">Order #SSS-8492</span>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-widget p-5 space-y-5">
+              <!-- Branded Tracking Header -->
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold uppercase">Delivered · Enjoy Guilt-Free</span>
+                  <h4 class="font-bold text-slate-900 text-sm sm:text-base mt-1.5">Belgian Dark Chocolate Truffle Box</h4>
+                  <p class="text-xs text-slate-500">Delivered to Ananya Sharma · Gurugram 122002</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-xl">
+                  🍫
+                </div>
+              </div>
+
+              <!-- Milestone Timeline -->
+              <div class="space-y-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                  <div class="flex-1 flex justify-between">
+                    <span class="font-bold text-slate-900">Delivered via Shiprocket Express</span>
+                    <span class="text-slate-400">Tue, 1:18 PM</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                  <div class="flex-1 flex justify-between">
+                    <span class="font-medium text-slate-600">Insulated cold-pack dispatched from hub</span>
+                    <span class="text-slate-400">Mon, 8:40 PM</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 1-Tap Reorder Card -->
+              <div class="p-4 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-300">Craving another box?</span>
+                  <span class="px-2 py-0.5 rounded bg-white/10 text-[10px] font-bold text-amber-300">VIP Repeat ₹50 OFF</span>
+                </div>
+                <div class="text-xs sm:text-sm font-bold">
+                  Reorder Belgian Dark Chocolate Truffle Box in 1 Tap
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Address (122002) &amp; PhonePe UPI saved—no OTP or form needed.
+                </p>
+                <button type="button" onclick="triggerOneTapReorder()" id="reorder-btn" class="w-full py-3 px-4 rounded-xl bg-brand-indigo hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition-smooth cursor-pointer shadow-md">
+                  ⚡ Reorder Favourite Box in 1 Tap · ₹649
+                </button>
+              </div>
+
+              <!-- Simulated Reorder Toast Confirmation -->
+              <div id="reorder-toast" class="hidden p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-center justify-between gap-2">
+                <div>
+                  <div class="font-extrabold">🎉 Instant Reorder Placed (#SSS-8540)!</div>
+                  <div class="text-[11px] text-emerald-800 mt-0.5">Arriving tomorrow at B-402, DLF Phase 5. Zero forms filled.</div>
+                </div>
+                <button type="button" onclick="resetReorderToast()" class="text-[11px] font-bold text-emerald-700 underline shrink-0 cursor-pointer">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================
+       8. FOOTER (Strictly No Commercials / Pricing)
+  ========================================================== -->
+  <footer class="border-t border-slate-200/80 bg-slate-50 py-10 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-6 h-6 rounded-lg bg-brand-indigo flex items-center justify-center text-white">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M13 2L4.5 13.5H11.5L10.5 22L19.5 10.5H12.5L13 2Z" />
+          </svg>
+        </div>
+        <span class="text-sm font-bold text-slate-900">fastrr × So Sorry Sugar · Checkout Experience Proposal</span>
+      </div>
+
+      <a href="#top" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-brand-indigo hover:border-indigo-200 shadow-2xs transition-smooth">
+        <span>Back to top</span>
+        <span>↑</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       INTERACTIVE VANILLA JAVASCRIPT
+  ========================================================== -->
+  <script>
+    // Smooth section helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // ---------------------------------------------------------
+    // STEP 1: Dynamic Pincode & Live EDD Switcher
+    // ---------------------------------------------------------
+    const pincodeData = {
+      '122002': {
+        headline: 'Get it tomorrow, Tue 24 Nov',
+        sub: 'Order within 3h 14m · Insulated cold-pack transit',
+        badge: 'Next-Day',
+        badgeClass: 'bg-emerald-600 text-white'
+      },
+      '400050': {
+        headline: 'Get it today by 9:00 PM',
+        sub: 'Same-day hyperlocal dispatch · Mumbai Bandra West',
+        badge: 'Same-Day',
+        badgeClass: 'bg-brand-indigo text-white'
+      },
+      '560038': {
+        headline: 'Get it by Wed, 25 Nov',
+        sub: 'Express air transit · Indiranagar, Bengaluru',
+        badge: 'Express 48h',
+        badgeClass: 'bg-amber-600 text-white'
+      }
+    };
+
+    function updatePincode(pin) {
+      const data = pincodeData[pin];
+      if (!data) return;
+
+      document.getElementById('edd-headline').textContent = data.headline;
+      document.getElementById('edd-sub').textContent = data.sub;
+
+      const badge = document.getElementById('edd-badge');
+      badge.textContent = data.badge;
+      badge.className = `px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide shrink-0 ${data.badgeClass}`;
+
+      // Update active button styling
+      document.querySelectorAll('.pin-btn').forEach(btn => {
+        btn.className = 'pin-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white text-slate-700 border border-slate-200 hover:border-slate-300 transition-smooth cursor-pointer';
+      });
+      const activeBtn = document.getElementById(`pin-${pin}`);
+      if (activeBtn) {
+        activeBtn.className = 'pin-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-brand-indigo text-white transition-smooth cursor-pointer';
+      }
+    }
+
+    // ---------------------------------------------------------
+    // STEP 2: Smart Cart Upsell & Tiered Progress Bar Toggle
+    // ---------------------------------------------------------
+    let upsellAdded = false;
+
+    function toggleCartUpsell() {
+      upsellAdded = !upsellAdded;
+
+      const upsellLine = document.getElementById('cart-upsell-line');
+      const btn = document.getElementById('toggle-upsell-btn');
+      const progressText = document.getElementById('cart-progress-text');
+      const progressPct = document.getElementById('cart-progress-pct');
+      const progressBar = document.getElementById('cart-progress-bar');
+      const discountVal = document.getElementById('cart-discount-val');
+      const totalVal = document.getElementById('cart-total-val');
+      const shippingTag = document.getElementById('cart-shipping-tag');
+
+      if (upsellAdded) {
+        upsellLine.classList.remove('hidden');
+        btn.textContent = '✓ Added';
+        btn.className = 'px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold shrink-0 transition-smooth cursor-pointer';
+
+        progressText.textContent = '🎉 Unlocked: FREE Express Shipping + Complimentary Mini Almond Bark!';
+        progressPct.textContent = '100%';
+        progressBar.style.width = '100%';
+
+        // 699 + 249 = 948; 5% off = 47 -> 901
+        discountVal.textContent = '-₹47';
+        totalVal.textContent = '₹901';
+        shippingTag.textContent = 'FREE Shipping';
+        shippingTag.className = 'text-[11px] font-bold text-emerald-600';
+      } else {
+        upsellLine.classList.add('hidden');
+        btn.textContent = '+ Add ₹249';
+        btn.className = 'px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shrink-0 transition-smooth cursor-pointer';
+
+        progressText.textContent = 'Add ₹100 more to unlock FREE Express Shipping + Mini Almond Bark!';
+        progressPct.textContent = '87%';
+        progressBar.style.width = '87%';
+
+        discountVal.textContent = '-₹35';
+        totalVal.textContent = '₹664';
+        shippingTag.textContent = '+ ₹49 shipping';
+        shippingTag.className = 'text-[11px] font-semibold text-slate-500';
+      }
+    }
+
+    // ---------------------------------------------------------
+    // STEP 3: Checkout Shopper Mode & Payment Method Toggle
+    // ---------------------------------------------------------
+    let currentShopperMode = 'returning';
+    let currentCheckoutMethod = 'prepaid';
+
+    function setShopperMode(mode) {
+      currentShopperMode = mode;
+
+      const btnRet = document.getElementById('mode-returning');
+      const btnFirst = document.getElementById('mode-firsttime');
+      const userLabel = document.getElementById('checkout-user-label');
+      const netPill = document.getElementById('checkout-network-pill');
+      const addrBody = document.getElementById('checkout-address-body');
+      const riskBadge = document.getElementById('cod-risk-badge');
+      const codTitle = document.getElementById('cod-option-title');
+      const codSub = document.getElementById('cod-option-sub');
+
+      if (mode === 'returning') {
+        btnRet.className = 'px-3 py-1 rounded-lg text-[11px] font-bold bg-brand-indigo text-white transition-smooth cursor-pointer';
+        btnFirst.className = 'px-3 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition-smooth cursor-pointer';
+
+        userLabel.textContent = 'Ananya Sharma · +91 98114 •••82';
+        netPill.textContent = 'Network Verified';
+        netPill.className = 'px-2 py-0.5 rounded-md bg-indigo-50 text-brand-indigo text-[10px] font-extrabold';
+
+        addrBody.innerHTML = `
+          <div class="font-semibold text-slate-800">B-402, DLF Phase 5, Golf Course Road</div>
+          <div>Gurugram, Haryana — 122002</div>
+        `;
+
+        riskBadge.textContent = 'Low RTO Score · Full COD Unlocked';
+        riskBadge.className = 'text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded';
+        codTitle.textContent = 'Cash on Delivery';
+        codSub.textContent = 'Pay ₹699 on delivery';
+      } else {
+        btnFirst.className = 'px-3 py-1 rounded-lg text-[11px] font-bold bg-brand-indigo text-white transition-smooth cursor-pointer';
+        btnRet.className = 'px-3 py-1 rounded-lg text-[11px] font-bold text-slate-600 hover:text-slate-900 transition-smooth cursor-pointer';
+
+        userLabel.textContent = 'Rohan Mehta · +91 99201 •••19';
+        netPill.textContent = '1-OTP Auto-Filled';
+        netPill.className = 'px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[10px] font-extrabold';
+
+        addrBody.innerHTML = `
+          <div class="font-semibold text-slate-800">14, Linking Road, Khar West</div>
+          <div>Mumbai, Maharashtra — 400052</div>
+        `;
+
+        riskBadge.textContent = 'Smart RTO Guard · Partial COD Active';
+        riskBadge.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded';
+        codTitle.textContent = 'Partial COD';
+        codSub.textContent = 'Pay ₹99 now + ₹600 on delivery';
+      }
+
+      selectCheckoutMethod(currentCheckoutMethod);
+    }
+
+    function selectCheckoutMethod(method) {
+      currentCheckoutMethod = method;
+      const prepaidBtn = document.getElementById('pay-pref-prepaid');
+      const codBtn = document.getElementById('pay-pref-cod');
+      const ctaBtn = document.getElementById('checkout-cta-btn');
+
+      if (method === 'prepaid') {
+        prepaidBtn.className = 'p-3 rounded-xl border-2 border-brand-indigo bg-indigo-50/50 text-left transition-smooth cursor-pointer';
+        codBtn.className = 'p-3 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-smooth cursor-pointer';
+        ctaBtn.textContent = 'Continue to 1-Tap UPI (₹649) →';
+      } else {
+        codBtn.className = 'p-3 rounded-xl border-2 border-brand-indigo bg-indigo-50/50 text-left transition-smooth cursor-pointer';
+        prepaidBtn.className = 'p-3 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-smooth cursor-pointer';
+        ctaBtn.textContent = currentShopperMode === 'returning'
+          ? 'Place Full COD Order (₹699) →'
+          : 'Pay ₹99 Advance to Confirm Partial COD →';
+      }
+    }
+
+    function toggleGiftNote() {
+      const checked = document.getElementById('gift-toggle').checked;
+      const box = document.getElementById('gift-note-box');
+      if (checked) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    // ---------------------------------------------------------
+    // STEP 4: Payment Stack Interactive UPI Intent Selector
+    // ---------------------------------------------------------
+    let selectedUpi = 'PhonePe';
+
+    function selectUpiApp(appName) {
+      selectedUpi = appName;
+      document.querySelectorAll('.upi-app-btn').forEach(btn => {
+        btn.className = 'upi-app-btn p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 flex flex-col items-center gap-1.5 transition-smooth cursor-pointer';
+      });
+      const active = document.getElementById(`upi-${appName}`);
+      if (active) {
+        active.className = 'upi-app-btn p-3 rounded-xl border-2 border-brand-indigo bg-indigo-50/40 flex flex-col items-center gap-1.5 transition-smooth cursor-pointer';
+      }
+      document.getElementById('pay-now-btn').textContent = `Pay ₹649 Instantly via ${appName} →`;
+      document.getElementById('payment-feedback').classList.add('hidden');
+    }
+
+    function triggerSimulatedPayment() {
+      const feedback = document.getElementById('payment-feedback');
+      feedback.textContent = `✓ Order #SSS-8492 Confirmed via ${selectedUpi} UPI Intent in 4.2 seconds!`;
+      feedback.classList.remove('hidden');
+    }
+
+    // ---------------------------------------------------------
+    // STEP 5: 1-Tap Reorder Simulation
+    // ---------------------------------------------------------
+    function triggerOneTapReorder() {
+      const toast = document.getElementById('reorder-toast');
+      const btn = document.getElementById('reorder-btn');
+      toast.classList.remove('hidden');
+      btn.textContent = '✓ Reorder Confirmed (#SSS-8540)';
+      btn.className = 'w-full py-3 px-4 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm transition-smooth cursor-pointer shadow-md';
+    }
+
+    function resetReorderToast() {
+      const toast = document.getElementById('reorder-toast');
+      const btn = document.getElementById('reorder-btn');
+      toast.classList.add('hidden');
+      btn.textContent = '⚡ Reorder Favourite Box in 1 Tap · ₹649';
+      btn.className = 'w-full py-3 px-4 rounded-xl bg-brand-indigo hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition-smooth cursor-pointer shadow-md';
+    }
+
+    // ---------------------------------------------------------
+    // Scrollspy for Top Sticky Navigation Bar
+    // ---------------------------------------------------------
+    const sections = ['today', 's1', 's2', 's3', 's4', 's5'];
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 140;
+      sections.forEach(secId => {
+        const secEl = document.getElementById(secId);
+        if (!secEl) return;
+        const top = secEl.offsetTop;
+        const height = secEl.offsetHeight;
+        const links = document.querySelectorAll(`a[href="#${secId}"]`);
+        if (scrollPos >= top && scrollPos < top + height) {
+          links.forEach(l => l.classList.add('active'));
+        } else {
+          links.forEach(l => l.classList.remove('active'));
+        }
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>
